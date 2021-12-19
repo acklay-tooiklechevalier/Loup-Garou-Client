@@ -3,6 +3,7 @@ package iut.acklaytooiklechevalier.ihm;
 import iut.acklaytooiklechevalier.Main;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,6 +17,7 @@ public class Games extends JPanel implements ActionListener {
 	private final JTextField txtChatEnvoie;
 	private final JLabel lblChatReception;
 	private final JLabel lblInfoRole;
+	private final JButton btnRetour;
 
 	public Games() {
 		setLayout(null);
@@ -24,6 +26,8 @@ public class Games extends JPanel implements ActionListener {
 		btnEnvoie.addActionListener(this);
 		txtChatEnvoie = new JTextField();
 		txtChatEnvoie.addActionListener(this);
+		btnRetour = new JButton("⌂");
+		btnRetour.addActionListener(this);
 
 		/*
 		 * Les JLabel permet l'utilisation d'un mode multi-ligne si le text contenu dedans est "cast" en HTML
@@ -54,16 +58,23 @@ public class Games extends JPanel implements ActionListener {
 		lblInfoRole.setVerticalAlignment(JLabel.CENTER);
 		lblInfoRole.setHorizontalAlignment(JLabel.CENTER);
 
+		btnRetour.setBounds(lblInfoRole.getX(), lblInfoRole.getY(), btnEnvoie.getWidth(), btnEnvoie.getHeight());
+
 		txtChatEnvoie.requestFocus();
 
 		add(btnEnvoie);
 		add(txtChatEnvoie);
 		add(lblChatReception);
 		add(lblInfoRole);
+		add(btnRetour);
 	}
 
 	public void setLblText(String s, String color) {
 		lblChatReception.setText(lblChatReception.getText() + "<p style=\"color:" + color + "\";>" + s + "</p>");
+	}
+
+	public JTextField getTxtChatEnvoie() {
+		return txtChatEnvoie;
 	}
 
 	public void updateRole(String role) {
@@ -74,6 +85,11 @@ public class Games extends JPanel implements ActionListener {
 						"<h1> Loup-Garou </h1>" + 
 						"<p>Vous êtes un Loup-Garou votre but est de tuer tout les villageois du village</p><br>" + 
 						"<p>Vous avez la possibilité de parler avec les autres loup pendant la nuit</p>" +
+						"<p>Commande :</p>" +
+						"<ul>" +
+							"<li>/kill [numero ou pseudo] (pour voté une cible pendant la nuit)</li>" +
+							"<li>/vote [numero ou pseudo] (pour voté une cible pendant la journée)</li>" +
+						"</ul>" +
 					"</body>" +
 				"</html>");
 		} else if ("Villageois".equals(role)) {
@@ -83,6 +99,10 @@ public class Games extends JPanel implements ActionListener {
 						"<h1> Villageois </h1>" + 
 						"<p>Vous êtes un Villageois votre but est de tuer tout les loup-garou du village</p><br>" + 
 						"<p>Vous profitez de la nuit pour vous reposer vous ne pouvez donc pas parler</p>" +
+						"<p>Commande :</p>" +
+						"<ul>" +
+							"<li>/vote [numero ou pseudo] (pour voté une cible pendant la journée)</li>" +
+						"</ul>" +
 					"</body>" +
 				"</html>");
 		} else if ("Sorciere".equals(role)) {
@@ -92,6 +112,13 @@ public class Games extends JPanel implements ActionListener {
 						"<h1> Sorciere </h1>" + 
 						"<p>Vous êtes une Sorciere votre but est de tuer tout les loup-garou du village</p><br>" + 
 						"<p>Vous profitez de la nuit pour parfaire vos talent ce qui vous à permis de créer deux fioles magique, l'une d'elle contient un puissant remède qui permet de soigner les blessures faites par un loup, l'autre est son contraire permettant de mettre fin à la vie d'un membre du village</p>" +
+						"<p>Commande :</p>" +
+						"<ul>" +
+							"<li>/kill [numero ou pseudo] (pour tuez une cible suplémentaire pendant la nuit)</li>" +
+							"<li>/alive (pour soigner la cible des loup-garou)</li>" +
+							"<li>/rien (pour ni tuer ni soigner pendant la nuit)</li>" +
+							"<li>/vote [numero ou pseudo] (pour voté une cible pendant la journée)</li>" +
+						"</ul>" +
 					"</body>" +
 				"</html>");
 		} else if ("mort".equals(role)) {
@@ -108,6 +135,9 @@ public class Games extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnRetour) {
+			Main.getInstance().getMenu().deconnection();
+		}
 		String msg = txtChatEnvoie.getText();
 		if (!msg.equals("")) {
 			Main.getInstance().getOut().println(msg);

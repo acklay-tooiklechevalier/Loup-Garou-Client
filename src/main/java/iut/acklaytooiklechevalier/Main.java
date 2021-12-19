@@ -87,12 +87,30 @@ public class Main {
 						} else if (msg.startsWith("Votre rôle est : ")) {
 							menu.getGames().setLblText(msg, "#00AAFF; font-weight: bold");//a mettre le role dans le chat 
 							menu.getGames().updateRole(msg.substring(17));
+						} else if (msg.startsWith("La nuit tombe")) {
+							menu.getGames().setLblText(msg, "#880000");
+						} else if (msg.startsWith("Une nouvelle journée")) {
+							menu.getGames().setLblText(msg, "#008800");
+						} else if (msg.startsWith("Vous avez")) {
+							menu.getGames().setLblText(msg, "#FF2222");
+						} else if (msg.startsWith("Auncun mort")) {
+							menu.getGames().setLblText(msg, "#22FF22");
+						} else if (msg.startsWith("le joueur")) {
+							menu.getGames().setLblText(msg, "#772222");
+						} else if (msg.startsWith("Vous êtes mort !")) {
+							menu.getGames().setLblText(msg, "#888888");
+							menu.getGames().updateRole("mort");
+						} else if (msg.startsWith("/v")) {
+							menu.getGames().setLblText(msg.substring(2), "#000000");
+						} else if (msg.startsWith("/m")) {
+							menu.getGames().setLblText(msg, "#888888");
 						} else {
 							menu.getGames().setLblText(msg, "#000000");
 						}
 						msg = in.readLine();
 					}
 					System.out.println("Serveur déconecté");
+					menu.deconnection();
 					out.close();
 					clientSocket.close();
 				} catch (IOException e) {
@@ -114,6 +132,10 @@ public class Main {
 
 	public PrintWriter getOut() {
 		return out;
+	}
+
+	public Socket getClientSocket() {
+		return clientSocket;
 	}
 
 	public static void main(String[] args) {
